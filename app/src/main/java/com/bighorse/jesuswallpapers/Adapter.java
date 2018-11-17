@@ -1,5 +1,6 @@
 package com.bighorse.jesuswallpapers;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +14,11 @@ public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements Im
     private List<ImageModel> imagesList = new ArrayList<>();
     private onImageClickedListener mListener;
 
-    public void setListener(onImageClickedListener mListener){
+    private Context mContext;
+
+    public void setListener(onImageClickedListener mListener, Context context){
         this.mListener = mListener;
+        this.mContext = context;
     }
 
     public List<ImageModel> getList() {
@@ -28,6 +32,7 @@ public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements Im
     public void addImage(ImageModel image){
         imagesList.add(image);
         notifyItemInserted(imagesList.size() - 1);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements Im
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int i) {
         ImageModel image = imagesList.get(i);
-        imageViewHolder.setImage(image);
+        imageViewHolder.setImage(image, mContext);
     }
 
     @Override

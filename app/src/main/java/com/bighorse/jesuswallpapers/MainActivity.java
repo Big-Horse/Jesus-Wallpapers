@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //FirebaseApp.initializeApp(this);
+        FirebaseApp.initializeApp(this);
         mRecyclerView = findViewById(R.id.recyclerview);
         mAdapter = new Adapter();
-        mAdapter.setListener(this);
+        mAdapter.setListener(this, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,3);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -39,18 +39,19 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         FirebaseController.getInstance().setListener(this);
         FirebaseController.getInstance().attachDatabaseListener();
 
-        mOverlayView = new ImageOverlayView(this, this);
+
     }
 
     @Override
     public void onClick(ImageModel image, int position) {
         final List<ImageModel> list = mAdapter.getList();
 
+        mOverlayView = new ImageOverlayView(this, this);
         new ImageViewer.Builder<>(this, list)
                 .setFormatter(new ImageViewer.Formatter<ImageModel>() {
                     @Override
                     public String format(ImageModel customImage) {
-                        return customImage.getUri().toString();
+                        return customImage.getUriWallpaperDownload();
                     }
                 }).setOverlayView(mOverlayView).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
             @Override
