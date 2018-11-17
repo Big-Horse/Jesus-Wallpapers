@@ -10,20 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements ImageViewHolder.onImageClickedListener {
-    List<ImageModel> imagesList = new ArrayList<>();
+    private List<ImageModel> imagesList = new ArrayList<>();
     private onImageClickedListener mListener;
 
     public void setListener(onImageClickedListener mListener){
         this.mListener = mListener;
     }
 
+    public List<ImageModel> getList() {
+        return imagesList;
+    }
+
     public interface onImageClickedListener{
         void onClick(ImageModel adapterPosition, int position);
     }
 
-    public void addImagesList(List<ImageModel> images){
-        imagesList.addAll(images);
-        notifyDataSetChanged();
+    public void addImage(ImageModel image){
+        imagesList.add(image);
+        notifyItemInserted(imagesList.size() - 1);
     }
 
     @NonNull
