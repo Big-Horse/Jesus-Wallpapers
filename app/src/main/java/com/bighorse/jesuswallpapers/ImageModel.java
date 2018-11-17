@@ -2,19 +2,33 @@ package com.bighorse.jesuswallpapers;
 
 import android.net.Uri;
 
+import com.google.firebase.database.Exclude;
+
 public class ImageModel {
 
-    private Uri uri;
+    private String uri;
+    @Exclude
+    private String name;
 
-    public ImageModel(Uri uri) {
+    public ImageModel(String name, String uri) {
         this.uri = uri;
     }
 
-    public Uri getUri() {
+    public String getUri() {
         return uri;
     }
 
-    public void setUri(Uri uri) {
+    public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Exclude
+    public String getName() {
+        return name;
+    }
+
+    @Exclude
+    public void setName(String name) {
+        this.name = name;
     }
 }
