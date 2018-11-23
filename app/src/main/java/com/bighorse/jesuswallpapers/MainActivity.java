@@ -3,6 +3,7 @@ package com.bighorse.jesuswallpapers;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -76,15 +77,21 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
     }
 
     @Override
-    public void onSetClicked(String mUriImage) {
-        WallpaperManager myWallpaperManager
+    public void onSetClicked(final String mUriImage) {
+        final WallpaperManager myWallpaperManager
                 = WallpaperManager.getInstance(getApplicationContext());
-        try {
-            myWallpaperManager.setBitmap(Utility.getBitmap(mUriImage, getApplicationContext()));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    myWallpaperManager.setBitmap(Utility.getBitmap(mUriImage, getApplicationContext()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
