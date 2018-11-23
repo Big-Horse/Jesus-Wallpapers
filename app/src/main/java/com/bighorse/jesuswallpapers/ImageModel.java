@@ -4,7 +4,6 @@ import com.google.firebase.database.Exclude;
 
 public class ImageModel {
 
-
     private String uri;
     private String uriThumb;
     private String uriWallpaper;
