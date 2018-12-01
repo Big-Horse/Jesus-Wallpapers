@@ -1,7 +1,6 @@
 package com.bighorse.jesuswallpapers;
 
 import android.app.WallpaperManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -85,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     }
 
-
-
     @Override
     public void onClick(ImageModel image, int position) {
         final List<ImageModel> list = mAdapter.getList();
@@ -143,11 +140,9 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.mainmenu, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -172,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     @Override
     public void onChildAdded(final ImageModel image) {
-
 
         new Thread() {
             @Override

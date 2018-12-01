@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 
 class ImageOverlayView extends RelativeLayout {
-    private Context mContext;
     private TextView mDownloadTextView;
     private TextView mSetTextView;
     private String mUriImageDownload;
@@ -24,7 +23,6 @@ class ImageOverlayView extends RelativeLayout {
 
     public ImageOverlayView(Context context,onImageOverlayClickedListener listener) {
         super(context);
-        mContext = context;
         mListener = listener;
         init();
     }
@@ -42,6 +40,7 @@ class ImageOverlayView extends RelativeLayout {
     public void setImage(String uriImage){
         mUriImageDownload = uriImage;
     }
+
     private void init() {
         View view = inflate(getContext(), R.layout.overlay_view, this);
         mDownloadTextView = (TextView) view.findViewById(R.id.download_button);
