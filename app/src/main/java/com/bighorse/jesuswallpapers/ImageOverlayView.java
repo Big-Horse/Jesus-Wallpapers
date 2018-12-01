@@ -1,7 +1,13 @@
 package com.bighorse.jesuswallpapers;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -9,21 +15,29 @@ import android.widget.TextView;
 
 
 class ImageOverlayView extends RelativeLayout {
+    private Activity mActivity;
     private Context mContext;
     private TextView mDownloadTextView;
     private TextView mSetTextView;
     private String mUriImageDownload;
+    private int REQUEST_WRITE_PERMISSION_CODE = 1;
 
     private onImageOverlayClickedListener mListener;
+    private String mFilename;
+
+    public void clickDownload() {
+        mDownloadTextView.callOnClick();
+    }
 
     public interface onImageOverlayClickedListener{
-        void onDownloadClicked(String mUriImage);
-        void onSetClicked(String mUriImage);
+        void onDownloadClicked(String mUriImage,String filename);
+        void onSetClicked(String mUriImage, int type);
     }
 
 
-    public ImageOverlayView(Context context,onImageOverlayClickedListener listener) {
+    public ImageOverlayView(Context context, Activity activity, onImageOverlayClickedListener listener) {
         super(context);
+        mActivity = activity;
         mContext = context;
         mListener = listener;
         init();
@@ -42,6 +56,9 @@ class ImageOverlayView extends RelativeLayout {
     public void setImage(String uriImage){
         mUriImageDownload = uriImage;
     }
+    public void setFilename(String filename){
+        mFilename = filename;
+    }
     private void init() {
         View view = inflate(getContext(), R.layout.overlay_view, this);
         mDownloadTextView = (TextView) view.findViewById(R.id.download_button);
@@ -49,7 +66,11 @@ class ImageOverlayView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if(mListener != null){
-                    mListener.onDownloadClicked(mUriImageDownload);
+                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION_CODE);
+                    } else {
+                        mListener.onDownloadClicked(mUriImageDownload, mFilename);
+                    }
                 }
             }
         });
@@ -58,9 +79,10 @@ class ImageOverlayView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if(mListener != null){
-                    mListener.onSetClicked(mUriImageDownload);
+                    mListener.onSetClicked(mUriImageDownload, 0);
                 }
             }
         });
     }
+
 }

@@ -3,4 +3,5 @@
     <string name="download">Download</string>
     <string name="set">Set</string>
     <string name="downloading_message">Image downloading…</string>
+    <string name="wallpaper_set">Wallpaper set</string>
 </resources>
