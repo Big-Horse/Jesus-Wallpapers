@@ -41,7 +41,6 @@
                 android:textSize="22sp"
                 android:gravity="center"
                 />
-
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </merge>

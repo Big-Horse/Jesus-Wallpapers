@@ -1,20 +1,24 @@
 package com.bighorse.jesuswallpapers;
 
 import android.app.WallpaperManager;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.ShareActionProvider;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,6 +34,12 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
     private Adapter mAdapter;
     private ImageOverlayView mOverlayView;
     private ProgressBar mProgressBar;
+
+    private AdView mAdMainBannerView;
+    private InterstitialAd mInterstitialMainAd;
+    private InterstitialAd mInterstitialVideoAd;
+
+    int videoAttempts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +59,33 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         FirebaseController.getInstance().setListener(this);
         FirebaseController.getInstance().attachDatabaseListener();
 
+        MobileAds.initialize(this, "ca-app-pub-5005687032079051~6397593090");
+
+        mAdMainBannerView = findViewById(R.id.adView);
+        mAdMainBannerView.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialMainAd = new InterstitialAd(this);
+        mInterstitialMainAd.setAdUnitId("ca-app-pub-5005687032079051/2725941397");
+        mInterstitialMainAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialMainAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                mInterstitialMainAd.show();
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when when the interstitial ad is closed.
+            }
+        });
+
+        mInterstitialVideoAd = new InterstitialAd(this);
+        mInterstitialVideoAd.setAdUnitId("ca-app-pub-5005687032079051/7793724804");
 
     }
+
+
 
     @Override
     public void onClick(ImageModel image, int position) {
@@ -63,7 +98,18 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
                     public String format(ImageModel customImage) {
                         return customImage.getUriWallpaperDownload();
                     }
-                }).setStartPosition(position).setOverlayView(mOverlayView).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
+                }).setOnDismissListener(new ImageViewer.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                videoAttempts++;
+
+                if ((videoAttempts !=0) && (videoAttempts %2 == 0)) {
+                    mInterstitialVideoAd.show();
+                }else{
+                    mInterstitialVideoAd.loadAd(new AdRequest.Builder().build());
+                }
+            }
+        }).setStartPosition(position).setOverlayView(mOverlayView).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
             @Override
             public void onImageChange(int position) {
                 ImageModel image = (ImageModel) list.get(position);
@@ -155,4 +201,5 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         }.start();
 
     }
+
 }
