@@ -1,7 +1,6 @@
 package com.bighorse.jesuswallpapers;
 
 import android.app.WallpaperManager;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.view.MenuItemCompat;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
             @Override
             public void onImageChange(int position) {
                 ImageModel image = (ImageModel) list.get(position);
-                mOverlayView.setImage(image.getUri());
+                mOverlayView.setImage(image.getUriWallpaperDownload());
             }
         }).build().show();
     }
