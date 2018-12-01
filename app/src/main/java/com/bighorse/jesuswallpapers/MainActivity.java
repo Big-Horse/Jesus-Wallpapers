@@ -17,10 +17,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,7 +47,11 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
 
 
-   @Override
+    private AdView mAdMainBannerView;
+    private InterstitialAd mInterstitialMainAd;
+    private InterstitialAd mInterstitialVideoAd;
+
+    int videoAttempts = 0;@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -59,6 +70,29 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         FirebaseController.getInstance().setListener(this);
         FirebaseController.getInstance().attachDatabaseListener();
 
+        MobileAds.initialize(this, "ca-app-pub-5005687032079051~6397593090");
+
+        mAdMainBannerView = findViewById(R.id.adView);
+        mAdMainBannerView.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialMainAd = new InterstitialAd(this);
+        mInterstitialMainAd.setAdUnitId("ca-app-pub-5005687032079051/2725941397");
+        mInterstitialMainAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialMainAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                mInterstitialMainAd.show();
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when when the interstitial ad is closed.
+            }
+        });
+
+        mInterstitialVideoAd = new InterstitialAd(this);
+        mInterstitialVideoAd.setAdUnitId("ca-app-pub-5005687032079051/7793724804");
 
     }
 
@@ -73,7 +107,18 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
                     public String format(ImageModel customImage) {
                         return customImage.getUriWallpaperDownload();
                     }
-                }).hideStatusBar(false).setStartPosition(position).setOverlayView(mOverlayView).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
+                }).hideStatusBar(true).setOnDismissListener(new ImageViewer.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                videoAttempts++;
+
+                if ((videoAttempts !=0) && (videoAttempts %2 == 0)) {
+                    mInterstitialVideoAd.show();
+                }else{
+                    mInterstitialVideoAd.loadAd(new AdRequest.Builder().build());
+                }
+            }
+        }).setStartPosition(position).setOverlayView(mOverlayView).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
             @Override
             public void onImageChange(int position) {
                 ImageModel image = (ImageModel) list.get(position);
@@ -133,8 +178,34 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
     }
 
     @Override
-    public void onChildAdded(final ImageModel image) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mainmenu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            shareApp();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private Intent shareApp() {
+        Intent intent= new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app));
+        startActivity(Intent.createChooser(intent, "Spread the message!!"));
+        return intent;
+    }
+
+    @Override
+    public void onChildAdded(final ImageModel image) {
 
         new Thread() {
             @Override

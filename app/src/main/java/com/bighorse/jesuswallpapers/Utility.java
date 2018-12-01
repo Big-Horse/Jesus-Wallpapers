@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -17,6 +18,9 @@ import java.util.concurrent.ExecutionException;
 
 public class Utility {
     static final String TAG = "Utility";
+
+    static int DEFAULT_INT_VALUE = 0;
+
     public static void askStoragePermission(Activity context) {
         if (Build.VERSION.SDK_INT >= 23) {
             ActivityCompat.requestPermissions(context, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -73,5 +77,17 @@ public class Utility {
             e.printStackTrace();
         }
         return image;
+    }
+
+    public static int getIntPreference(Context context, String key) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(key, DEFAULT_INT_VALUE);
+    }
+
+    public static void saveIntPreference(Context context, String key, int data) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putInt(key, data)
+                .apply();
     }
 }
