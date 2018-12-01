@@ -12,7 +12,7 @@ class ImageOverlayView extends RelativeLayout {
     private Context mContext;
     private TextView mDownloadTextView;
     private TextView mSetTextView;
-    private String mUriImage;
+    private String mUriImageDownload;
 
     private onImageOverlayClickedListener mListener;
 
@@ -40,7 +40,7 @@ class ImageOverlayView extends RelativeLayout {
     }
 
     public void setImage(String uriImage){
-        mUriImage = uriImage;
+        mUriImageDownload = uriImage;
     }
     private void init() {
         View view = inflate(getContext(), R.layout.overlay_view, this);
@@ -49,7 +49,7 @@ class ImageOverlayView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if(mListener != null){
-                    mListener.onDownloadClicked(mUriImage);
+                    mListener.onDownloadClicked(mUriImageDownload);
                 }
             }
         });
@@ -58,7 +58,7 @@ class ImageOverlayView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if(mListener != null){
-                    mListener.onSetClicked(mUriImage);
+                    mListener.onSetClicked(mUriImageDownload);
                 }
             }
         });

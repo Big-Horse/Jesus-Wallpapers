@@ -1,7 +1,6 @@
 package com.bighorse.jesuswallpapers;
 
 import android.app.WallpaperManager;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
@@ -19,8 +17,6 @@ import com.google.firebase.storage.StorageReference;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Adapter.onImageClickedListener, ImageOverlayView.onImageOverlayClickedListener, FirebaseController.FirebaseListener {
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
             @Override
             public void onImageChange(int position) {
                 ImageModel image = (ImageModel) list.get(position);
-                mOverlayView.setImage(image.getUri());
+                mOverlayView.setImage(image.getUriWallpaperDownload());
             }
         }).build().show();
     }
