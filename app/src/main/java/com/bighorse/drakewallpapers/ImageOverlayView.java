@@ -1,4 +1,4 @@
-package com.bighorse.jesuswallpapers;
+package com.bighorse.drakewallpapers;
 
 import android.Manifest;
 import android.app.Activity;

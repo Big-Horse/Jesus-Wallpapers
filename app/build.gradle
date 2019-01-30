@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.bighorse.jesuswallpapers"
+        applicationId "com.bighorse.drakewallpapers"
         minSdkVersion 20
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.2"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
     implementation 'com.google.android.gms:play-services-ads:17.1.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
 }
 apply plugin: 'com.google.gms.google-services'

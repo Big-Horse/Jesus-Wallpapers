@@ -1,4 +1,4 @@
-package com.bighorse.jesuswallpapers;
+package com.bighorse.drakewallpapers;
 
 import android.Manifest;
 import android.app.DownloadManager;
@@ -84,13 +84,13 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         FirebaseController.getInstance().setListener(this);
         FirebaseController.getInstance().attachDatabaseListener();
 
-        MobileAds.initialize(this, "ca-app-pub-5005687032079051~6397593090");
+        MobileAds.initialize(this, "ca-app-pub-5005687032079051~8894641764");
 
         mAdMainBannerView = findViewById(R.id.adView);
         mAdMainBannerView.loadAd(new AdRequest.Builder().build());
 
         mInterstitialMainAd = new InterstitialAd(this);
-        mInterstitialMainAd.setAdUnitId("ca-app-pub-5005687032079051/2725941397");
+        mInterstitialMainAd.setAdUnitId("ca-app-pub-5005687032079051/6711455267");
         mInterstitialMainAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialMainAd.setAdListener(new AdListener() {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         });
 
         mInterstitialVideoAd = new InterstitialAd(this);
-        mInterstitialVideoAd.setAdUnitId("ca-app-pub-5005687032079051/7793724804");
+        mInterstitialVideoAd.setAdUnitId("ca-app-pub-5005687032079051/9007866993");
 
     }
 

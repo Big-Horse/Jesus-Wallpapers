@@ -1,4 +1,4 @@
-package com.bighorse.jesuswallpapers;
+package com.bighorse.drakewallpapers;
 
 import android.app.DownloadManager;
 import android.app.WallpaperManager;
@@ -40,7 +40,7 @@ public class ImageViewActivity extends AppCompatActivity implements ImageOverlay
         final List<ImageModel> list = MainActivity.mAdapter.getList();
 
         mInterstitialImageFullAd = new InterstitialAd(this);
-        mInterstitialImageFullAd.setAdUnitId("ca-app-pub-5005687032079051/2712420957");
+        mInterstitialImageFullAd.setAdUnitId("ca-app-pub-5005687032079051/2059315261");
         mInterstitialImageFullAd.loadAd(new AdRequest.Builder().build());
 
 

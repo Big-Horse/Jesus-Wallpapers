@@ -1,4 +1,4 @@
-package com.bighorse.jesuswallpapers;
+package com.bighorse.drakewallpapers;
 
 import android.content.Context;
 import android.content.Intent;
