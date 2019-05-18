@@ -2,9 +2,7 @@ package com.bighorse.jesuswallpapers;
 
 import com.google.firebase.database.Exclude;
 
-import java.io.Serializable;
-
-public class ImageModel implements Serializable {
+public class ImageModel {
 
     private String uri;
     private String uriThumb;
@@ -22,6 +20,8 @@ public class ImageModel implements Serializable {
         this.uri = uri;
         this.uriThumb = uriThumb;
         this.uriWallpaper = uriWallpaper;
+
+
     }
 
 

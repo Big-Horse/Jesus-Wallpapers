@@ -36,36 +36,23 @@ import com.google.firebase.storage.StorageReference;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements Adapter.onImageClickedListener, FirebaseController.FirebaseListener {
+public class MainActivity extends AppCompatActivity implements Adapter.onImageClickedListener, ImageOverlayView.onImageOverlayClickedListener, FirebaseController.FirebaseListener {
 
     private RecyclerView mRecyclerView;
-    public static Adapter mAdapter;
-
+    private Adapter mAdapter;
+    private ImageOverlayView mOverlayView;
     private ProgressBar mProgressBar;
-
+    private int REQUEST_WRITE_PERMISSION_CODE = 1;
 
 
 
     private AdView mAdMainBannerView;
     private InterstitialAd mInterstitialMainAd;
-    private static InterstitialAd mInterstitialVideoAd;
+    private InterstitialAd mInterstitialVideoAd;
 
-    static int videoAttempts = 0;
-
-    public static void addVideoAttempt() {
-        videoAttempts++;
-
-        if ((videoAttempts !=0) && (videoAttempts %2 == 0)) {
-            mInterstitialVideoAd.show();
-        }else{
-            mInterstitialVideoAd.loadAd(new AdRequest.Builder().build());
-        }
-    }
-
-    @Override
+    int videoAttempts = 0;@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -112,16 +99,84 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     @Override
     public void onClick(ImageModel image, int position) {
-        Intent imageViewActivity = new Intent(this, ImageViewActivity.class);
-        imageViewActivity.putExtra("image", image);
-        imageViewActivity.putExtra("position", position);
-        startActivity(imageViewActivity);
+        final List<ImageModel> list = mAdapter.getList();
+
+        mOverlayView = new ImageOverlayView(this, this, this);
+        new ImageViewer.Builder<>(this, list)
+                .setFormatter(new ImageViewer.Formatter<ImageModel>() {
+                    @Override
+                    public String format(ImageModel customImage) {
+                        return customImage.getUriWallpaperDownload();
+                    }
+                }).hideStatusBar(true).setOnDismissListener(new ImageViewer.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                videoAttempts++;
+
+                if ((videoAttempts !=0) && (videoAttempts %2 == 0)) {
+                    mInterstitialVideoAd.show();
+                }else{
+                    mInterstitialVideoAd.loadAd(new AdRequest.Builder().build());
+                }
+            }
+        }).setStartPosition(position).setOverlayView(mOverlayView).setImageChangeListener(new ImageViewer.OnImageChangeListener() {
+            @Override
+            public void onImageChange(int position) {
+                ImageModel image = (ImageModel) list.get(position);
+                mOverlayView.setImage(image.getUriWallpaperDownload());
+                mOverlayView.setFilename(image.getName());
+            }
+        }).build().show();
+    }
+
+    @Override
+    public void onDownloadClicked(String mUriImage, String filename) {
+        Uri uri = Uri.parse(mUriImage);
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
+                DownloadManager.Request.NETWORK_MOBILE);
+
+        // set title and description
+        request.setTitle(filename + ".jgp");
+
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        //set the local destination for download file to a path within the application's external files directory
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,filename + ".jpg");
+        request.setMimeType("image/*");
+        downloadManager.enqueue(request);
 
     }
 
+    @Override
+    public void onSetClicked(final String mUriImage, int type) {
+        final WallpaperManager myWallpaperManager
+                = WallpaperManager.getInstance(getApplicationContext());
 
+        AsyncTask.execute(() -> {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    // On Android N and above use the new API to set both the general system wallpaper and
+                    // the lock-screen-specific wallpaper
+                    myWallpaperManager.setBitmap(Utility.getBitmap(mUriImage, getApplicationContext()),null, true, WallpaperManager.FLAG_SYSTEM | WallpaperManager.FLAG_LOCK);
+                } else {
+                    myWallpaperManager.setBitmap(Utility.getBitmap(mUriImage, getApplicationContext()));
+                }
 
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            finally {
+                MainActivity.this.runOnUiThread(()->{
+                    Toast.makeText(MainActivity.this, MainActivity.this.getResources().getString(R.string.wallpaper_set),Toast.LENGTH_SHORT).show();
+                });
 
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,6 +236,18 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == REQUEST_WRITE_PERMISSION_CODE)
+        {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mOverlayView.clickDownload();
+            } else {
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
+        }
+    }
 
 }
