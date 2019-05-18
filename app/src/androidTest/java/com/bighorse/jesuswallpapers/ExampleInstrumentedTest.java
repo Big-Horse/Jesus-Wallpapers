@@ -1,4 +1,4 @@
-package com.bighorse.drakewallpapers;
+package com.bighorse.jesuswallpapers;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.bighorse.drakewallpapers", appContext.getPackageName());
+        assertEquals("com.bighorse.jesuswallpapers", appContext.getPackageName());
     }
 }

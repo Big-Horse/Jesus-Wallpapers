@@ -1,4 +1,4 @@
-package com.bighorse.drakewallpapers;
+package com.bighorse.jesuswallpapers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
