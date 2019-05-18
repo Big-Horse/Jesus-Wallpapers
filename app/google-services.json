@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "500152633118",
+    "firebase_url": "https://jesus-wallpapers-a1e6a.firebaseio.com",
+    "project_id": "jesus-wallpapers-a1e6a",
+    "storage_bucket": "jesus-wallpapers-a1e6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500152633118:android:5045f0b86e84166f",
+        "android_client_info": {
+          "package_name": "com.bighorse.jesuswallpapers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500152633118-8gvrg262t4npq77m0jnm8ckr6u8g2p77.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bighorse.jesuswallpapers",
+            "certificate_hash": "bf4ab37c010f29ea93fdef7752d573f9b8d6a16c"
+          }
+        },
+        {
+          "client_id": "500152633118-fth9k03opj1i47hq861fne64rpuhf0s3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcw-GRASl57HsaGPxAIsgrekrHHQ4DDH0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500152633118-fth9k03opj1i47hq861fne64rpuhf0s3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
